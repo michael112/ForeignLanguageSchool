@@ -1,0 +1,54 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeFile="Template.master.cs" Inherits="Template" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <link rel="Stylesheet" type="text/css" href="Style.css" />
+    <asp:ContentPlaceHolder id="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <div id="MainMenu">
+        <h2 class="MenuItems">Menu główne</h2>
+        <ul class="PAMenuItems">
+        <li><a href="Default.aspx" class="blackHyperlink">Strona główna</a></li>
+        <%
+            String loggedAs = LoginInfoChecker.checkLoginInfo(Request.Cookies["user"], Session);
+            String loginString = "";
+            if (loggedAs != null)
+            {
+                loginString = "<li><a href=\"Login.aspx?page=logout\" class=\"blackHyperlink\">Wyloguj</a></li>" + "\n\t";
+            }
+            else
+            {
+                loginString = "<li><a href=\"Register.aspx\" class=\"blackHyperlink\">Rejestracja</a>" + "\n\t" + "<li><a href=\"Login.aspx\" class=\"blackHyperlink\">Logowanie</a></li>" + "\n\t";
+            }
+            Response.Write(loginString);
+
+            if (AdminRightsChecker.SetUserPrivileges(Request.Cookies["user"], Session).CzySek())
+            {
+                Response.Write("<li><a href=\"AdminPanel.aspx\" class=\"blackHyperlink\">Panel administracyjny</a></li>");
+            }
+            else
+            {
+                Response.Write("<li><a href=\"AdminPanel.aspx?content=ManageCoursesNoAdmin\" class=\"blackHyperlink\">Obejrzyj listę kursów</a></li>");
+            }
+        %>
+        </ul>
+    </div>
+    <div id="Site">
+        <form id="form1" runat="server">
+        <div>
+            <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+            <asp:ContentPlaceHolder id="ContentPlaceHolder1" runat="server"></asp:ContentPlaceHolder>
+        </div>
+        </form>
+    </div>
+    <div id="Footer">
+        <p>Michał Choromański 2015</p>
+    </div>
+</body>
+</html>

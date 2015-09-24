@@ -1,0 +1,146 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ELrn" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=localhost;Initial Catalog=ELrn;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="ELrnConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Content" Member="Content">
+    <Type Name="Content">
+      <Column Name="SiteID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LangVersion" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Header" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Content" Member="Content1" Type="System.String" DbType="VarChar(2000) NOT NULL" CanBeNull="false" />
+      <Association Name="LangVersions_Content" Member="LangVersions" ThisKey="LangVersion" OtherKey="ID" Type="LangVersions" IsForeignKey="true" />
+      <Association Name="Sites_Content" Member="Sites" ThisKey="SiteID" OtherKey="SiteID" Type="Sites" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.WariantyOdpowiedzi" Member="WariantyOdpowiedzi">
+    <Type Name="WariantyOdpowiedzi">
+      <Column Name="IDpytania" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IDodpowiedzi" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Tresc" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Column Name="CzyPoprawna" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="TestyZamknietePytania_WariantyOdpowiedzi" Member="TestyZamknietePytania" ThisKey="IDpytania" OtherKey="IDpytania" Type="TestyZamknietePytania" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Jezyki" Member="Jezyki">
+    <Type Name="Jezyki">
+      <Column Name="JezykID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Nazwa" Type="System.String" DbType="VarChar(25) NOT NULL" CanBeNull="false" />
+      <Association Name="Jezyki_Kursy" Member="Kursy" ThisKey="JezykID" OtherKey="Jezyk" Type="Kursy" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KonsultacjeTerminy" Member="KonsultacjeTerminy">
+    <Type Name="KonsultacjeTerminy">
+      <Column Name="IDprowadzacego" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LimitMiejsc" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TerminStaly" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Users_KonsultacjeTerminy" Member="Users" ThisKey="IDprowadzacego" OtherKey="UserID" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.KonsultacjeZapis" Member="KonsultacjeZapis">
+    <Type Name="KonsultacjeZapis">
+      <Column Name="IDprowadzacego" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IDkursanta" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="DokladnaData" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="Temat" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Association Name="Users_KonsultacjeZapis" Member="Users" ThisKey="IDkursanta" OtherKey="UserID" Type="Users" IsForeignKey="true" />
+      <Association Name="Users_KonsultacjeZapis1" Member="Users1" ThisKey="IDprowadzacego" OtherKey="UserID" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Kursy" Member="Kursy">
+    <Type Name="Kursy">
+      <Column Name="KursID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Jezyk" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Poziom" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Typ" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IDprowadzacego" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Kursy_Oceny" Member="Oceny" ThisKey="KursID" OtherKey="IDkursu" Type="Oceny" />
+      <Association Name="Kursy_TestyZamkniete" Member="TestyZamkniete" ThisKey="KursID" OtherKey="IDkursu" Type="TestyZamkniete" />
+      <Association Name="Kursy_Materialy" Member="Materialy" ThisKey="KursID" OtherKey="CourseID" Type="Materialy" />
+      <Association Name="Jezyki_Kursy" Member="Jezyki" ThisKey="Jezyk" OtherKey="JezykID" Type="Jezyki" IsForeignKey="true" />
+      <Association Name="Poziomy_Kursy" Member="Poziomy" ThisKey="Poziom" OtherKey="PoziomID" Type="Poziomy" IsForeignKey="true" />
+      <Association Name="Users_Kursy" Member="Users" ThisKey="IDprowadzacego" OtherKey="UserID" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.LangVersions" Member="LangVersions">
+    <Type Name="LangVersions">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="LangVersions_Content" Member="Content" ThisKey="ID" OtherKey="LangVersion" Type="Content" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Oceny" Member="Oceny">
+    <Type Name="Oceny">
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IDkursu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Wartosc" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Comment" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Association Name="Kursy_Oceny" Member="Kursy" ThisKey="IDkursu" OtherKey="KursID" Type="Kursy" IsForeignKey="true" />
+      <Association Name="Users_Oceny" Member="Users" ThisKey="UserID" OtherKey="UserID" Type="Users" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Poziomy" Member="Poziomy">
+    <Type Name="Poziomy">
+      <Column Name="PoziomID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Nazwa" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Association Name="Poziomy_Kursy" Member="Kursy" ThisKey="PoziomID" OtherKey="Poziom" Type="Kursy" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Sites" Member="Sites">
+    <Type Name="Sites">
+      <Column Name="SiteID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Sites_Content" Member="Content" ThisKey="SiteID" OtherKey="SiteID" Type="Content" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestyZamkniete" Member="TestyZamkniete">
+    <Type Name="TestyZamkniete">
+      <Column Name="IDtestu" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="IDkursu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Tytul" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="Comment" Type="System.String" DbType="VarChar(1000)" CanBeNull="true" />
+      <Association Name="TestyZamkniete_TestyZamknietePytania" Member="TestyZamknietePytania" ThisKey="IDtestu" OtherKey="IDtestu" Type="TestyZamknietePytania" />
+      <Association Name="Kursy_TestyZamkniete" Member="Kursy" ThisKey="IDkursu" OtherKey="KursID" Type="Kursy" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TestyZamknietePytania" Member="TestyZamknietePytania">
+    <Type Name="TestyZamknietePytania">
+      <Column Name="IDtestu" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IDpytania" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="Tresc" Type="System.String" DbType="VarChar(1000) NOT NULL" CanBeNull="false" />
+      <Association Name="TestyZamknietePytania_WariantyOdpowiedzi" Member="WariantyOdpowiedzi" ThisKey="IDpytania" OtherKey="IDpytania" Type="WariantyOdpowiedzi" />
+      <Association Name="TestyZamkniete_TestyZamknietePytania" Member="TestyZamkniete" ThisKey="IDtestu" OtherKey="IDtestu" Type="TestyZamkniete" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Users" Member="Users">
+    <Type Name="Users">
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="CzyAdmin" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Imie" Type="System.String" DbType="NVarChar(15) NOT NULL" CanBeNull="false" />
+      <Column Name="Nazwisko" Type="System.String" DbType="NVarChar(25) NOT NULL" CanBeNull="false" />
+      <Column Name="PhoneNumber" Type="System.String" DbType="VarChar(15)" CanBeNull="true" />
+      <Column Name="PhoneCountryCode" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Column Name="Street" Type="System.String" DbType="NVarChar(60)" CanBeNull="true" />
+      <Column Name="StreetNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="FlatNumber" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="PostCode" Type="System.String" DbType="VarChar(6)" CanBeNull="true" />
+      <Column Name="City" Type="System.String" DbType="NVarChar(30)" CanBeNull="true" />
+      <Column Name="PhoneAreaCode" Type="System.String" DbType="VarChar(2)" CanBeNull="true" />
+      <Column Name="Login" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordSalt" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="PasswordHash" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="[E-mail]" Member="E_mail" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Association Name="Users_KonsultacjeTerminy" Member="KonsultacjeTerminy" ThisKey="UserID" OtherKey="IDprowadzacego" Type="KonsultacjeTerminy" />
+      <Association Name="Users_KonsultacjeZapis" Member="KonsultacjeZapis" ThisKey="UserID" OtherKey="IDkursanta" Type="KonsultacjeZapis" />
+      <Association Name="Users_KonsultacjeZapis1" Member="KonsultacjeZapis1" ThisKey="UserID" OtherKey="IDprowadzacego" Type="KonsultacjeZapis" />
+      <Association Name="Users_Kursy" Member="Kursy" ThisKey="UserID" OtherKey="IDprowadzacego" Type="Kursy" />
+      <Association Name="Users_Oceny" Member="Oceny" ThisKey="UserID" OtherKey="UserID" Type="Oceny" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Materialy" Member="Materialy">
+    <Type Name="Materialy">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CourseID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(MAX)" CanBeNull="true" />
+      <Column Name="FilePath" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Kursy_Materialy" Member="Kursy" ThisKey="CourseID" OtherKey="KursID" Type="Kursy" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
